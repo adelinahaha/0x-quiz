@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>0x Quiz — Solana Accelerate 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --off-black: #1c1d20;
+  --mid-gray: #6b6c70;
+  --white: #FCFCFC;
+  --green: #4ade80;
+  --red: #f87171;
+  --gold: #fbbf24;
+  --font: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { height: 100%; }
+body {
+  min-height: 100%;
+  background: var(--off-black);
+  color: var(--white);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+.app { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+.screen { display: none; flex-direction: column; flex: 1; }
+.screen.active { display: flex; animation: fadeUp 0.32s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+/* LOGO SVG */
+.logo { display: block; }
+
+/* ===== WELCOME ===== */
+#screen-welcome { justify-content: space-between; padding: 44px 24px 36px; min-height: 100vh; }
+.welcome-eyebrow { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--mid-gray); margin-top: 36px; margin-bottom: 18px; }
+.welcome-title { font-size: clamp(36px,10vw,52px); font-weight: 800; line-height: 1.0; letter-spacing: -2px; margin-bottom: 18px; }
+.welcome-title .muted { color: var(--mid-gray); }
+.welcome-desc { font-size: 15px; line-height: 1.65; color: rgba(252,252,252,0.5); margin-bottom: 24px; }
+.welcome-desc strong { color: var(--white); font-weight: 600; }
+.prize-pill { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--gold); background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.18); padding: 8px 14px; border-radius: 8px; margin-bottom: 36px; }
+.divider { height: 1px; background: rgba(255,255,255,0.07); margin-bottom: 22px; }
+
+.btn-primary { display: flex; align-items: center; justify-content: center; width: 100%; background: var(--white); color: #1c1d20; font-family: var(--font); font-size: 16px; font-weight: 800; padding: 18px 24px; border-radius: 14px; border: none; cursor: pointer; letter-spacing: -0.3px; transition: transform 0.1s, opacity 0.1s; -webkit-tap-highlight-color: transparent; }
+.btn-primary:active { transform: scale(0.97); opacity: 0.9; }
+.btn-secondary { display: flex; align-items: center; justify-content: center; width: 100%; background: transparent; color: var(--white); font-family: var(--font); font-size: 15px; font-weight: 600; padding: 14px 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.14); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background 0.1s; }
+.btn-secondary:active { background: rgba(255,255,255,0.06); }
+
+/* ===== QUIZ ===== */
+#screen-quiz { padding: 0; min-height: 100vh; }
+.quiz-top { padding: 18px 20px 14px; position: sticky; top: 0; background: var(--off-black); z-index: 10; }
+.quiz-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.q-counter { font-family: var(--mono); font-size: 12px; color: var(--mid-gray); }
+.progress-track { height: 2px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--white); border-radius: 2px; transition: width 0.45s cubic-bezier(0.4,0,0.2,1); }
+
+.quiz-body { padding: 20px 20px 120px; flex: 1; }
+.multi-badge { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.2); padding: 4px 10px; border-radius: 6px; margin-bottom: 14px; display: inline-block; opacity: 0; transition: opacity 0.3s; }
+.multi-badge.visible { opacity: 1; }
+.question-text { font-size: clamp(20px,5.5vw,26px); font-weight: 700; line-height: 1.2; letter-spacing: -0.5px; margin-bottom: 22px; }
+
+.options-list { display: flex; flex-direction: column; gap: 10px; }
+.option-btn { display: flex; align-items: flex-start; gap: 14px; padding: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.09); border-radius: 14px; cursor: pointer; text-align: left; color: var(--white); font-family: var(--font); font-size: 15px; font-weight: 400; line-height: 1.45; width: 100%; -webkit-tap-highlight-color: transparent; min-height: 54px; transition: border-color 0.1s, background 0.1s; }
+.option-btn:active:not(:disabled) { background: rgba(255,255,255,0.06); }
+.option-letter { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--mid-gray); min-width: 18px; margin-top: 2px; flex-shrink: 0; transition: color 0.2s; }
+.option-btn.selected { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.05); }
+.option-btn.selected .option-letter { color: var(--white); }
+.option-btn.correct { border-color: var(--green) !important; background: rgba(74,222,128,0.07) !important; animation: correctPulse 0.45s ease; }
+.option-btn.correct .option-letter { color: var(--green) !important; }
+.option-btn.wrong { border-color: var(--red) !important; background: rgba(248,113,113,0.07) !important; animation: wrongShake 0.4s ease; }
+.option-btn.wrong .option-letter { color: var(--red) !important; }
+@keyframes correctPulse { 0%{transform:scale(1)} 35%{transform:scale(1.018)} 65%{transform:scale(0.998)} 100%{transform:scale(1)} }
+@keyframes wrongShake { 0%{transform:translateX(0)} 20%{transform:translateX(-7px)} 40%{transform:translateX(7px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} 100%{transform:translateX(0)} }
+
+.reveal-panel { margin-top: 14px; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; font-size: 13px; line-height: 1.65; color: rgba(252,252,252,0.5); opacity: 0; transform: translateY(6px); transition: opacity 0.3s, transform 0.3s; }
+.reveal-panel.visible { opacity: 1; transform: translateY(0); }
+.reveal-title { font-weight: 700; font-size: 13px; color: var(--white); margin-bottom: 4px; }
+
+.quiz-footer { position: fixed; bottom: 0; left: 0; right: 0; padding: 12px 20px 30px; background: linear-gradient(to top, var(--off-black) 70%, transparent); z-index: 20; }
+.action-btn { display: flex; align-items: center; justify-content: center; width: 100%; font-family: var(--font); font-size: 16px; font-weight: 800; padding: 18px 24px; border-radius: 14px; border: none; cursor: pointer; letter-spacing: -0.3px; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.1s; -webkit-tap-highlight-color: transparent; background: var(--white); color: #1c1d20; }
+.action-btn.visible { opacity: 1; pointer-events: all; }
+.action-btn:active { transform: scale(0.97); }
+
+/* particles */
+.particle { position: fixed; pointer-events: none; z-index: 100; border-radius: 50%; animation: pFly 0.9s ease-out forwards; }
+@keyframes pFly { 0%{transform:translate(0,0) scale(1);opacity:1} 100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0} }
+
+/* ===== FORM ===== */
+#screen-form { padding: 44px 24px 48px; min-height: 100vh; }
+.score-pill { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; color: var(--green); background: rgba(74,222,128,0.09); border: 1px solid rgba(74,222,128,0.2); padding: 6px 12px; border-radius: 8px; margin-bottom: 18px; }
+.form-title { font-size: 30px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 8px; line-height: 1.1; }
+.form-subtitle { font-size: 14px; line-height: 1.6; color: rgba(252,252,252,0.5); margin-bottom: 26px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.form-group { margin-bottom: 12px; }
+.form-label { display: block; font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--mid-gray); margin-bottom: 6px; }
+.form-label .opt { color: rgba(107,108,112,0.6); font-weight: 400; }
+.form-input, .form-select, .form-textarea { display: block; width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 13px 14px; color: var(--white); font-family: var(--font); font-size: 15px; outline: none; transition: border-color 0.15s; -webkit-appearance: none; appearance: none; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: rgba(255,255,255,0.3); }
+.form-input::placeholder, .form-textarea::placeholder { color: rgba(107,108,112,0.5); }
+.form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6c70' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
+.form-select option { background: #26272B; color: #FCFCFC; }
+.form-textarea { resize: vertical; min-height: 80px; }
+.form-actions { margin-top: 26px; display: flex; flex-direction: column; gap: 10px; }
+
+/* ===== COMPLETE ===== */
+#screen-complete { padding: 44px 24px 48px; min-height: 100vh; }
+.trader-card { border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 26px 22px; background: rgba(255,255,255,0.03); margin-bottom: 28px; position: relative; overflow: hidden; }
+.trader-card::after { content:''; position:absolute; top:-60px; right:-60px; width:160px; height:160px; background:radial-gradient(circle,rgba(255,255,255,0.04) 0%,transparent 70%); border-radius:50%; pointer-events:none; }
+.trader-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--mid-gray); margin-bottom: 14px; }
+.trader-archetype { font-size: 26px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 10px; line-height: 1.1; }
+.trader-desc { font-size: 14px; line-height: 1.65; color: rgba(252,252,252,0.6); margin-bottom: 20px; }
+.trader-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.07); }
+.stat-val { font-family: var(--mono); font-size: 17px; font-weight: 500; color: var(--white); }
+.stat-label { font-family: var(--mono); font-size: 9px; color: var(--mid-gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+.loading-card { display: flex; align-items: center; gap: 12px; color: var(--mid-gray); font-family: var(--mono); font-size: 12px; padding: 6px 0; }
+.dot-pulse { display: flex; gap: 4px; }
+.dot-pulse span { width: 5px; height: 5px; background: var(--mid-gray); border-radius: 50%; animation: dotB 1.2s ease-in-out infinite; }
+.dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
+.dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotB { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
+
+.completion-title { font-size: 30px; font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; }
+.swag-instruction { display: flex; align-items: flex-start; gap: 14px; background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 16px; padding: 20px; font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--white); margin-bottom: 0; }
+.swag-instruction-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+
+/* confetti */
+.confetti-piece { position: fixed; z-index: 200; pointer-events: none; border-radius: 2px; animation: cFall var(--dur) linear forwards; }
+@keyframes cFall { 0%{transform:translateY(-20px) rotate(0deg) translateX(0);opacity:1} 100%{transform:translateY(110vh) rotate(var(--rot)) translateX(var(--drift));opacity:0} }
+
+/* admin */
+.admin-btn { position: fixed; bottom: 12px; right: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); color: rgba(107,108,112,0.5); font-family: var(--mono); font-size: 9px; padding: 5px 10px; border-radius: 6px; cursor: pointer; z-index: 50; -webkit-tap-highlight-color: transparent; }
+.admin-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 300; padding: 20px; overflow-y: auto; }
+.admin-overlay.open { display: block; }
+.admin-inner { background: #1a1b1e; border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 22px; max-width: 540px; margin: 0 auto; }
+.admin-inner h2 { font-size: 17px; font-weight: 700; margin-bottom: 12px; }
+.admin-inner pre { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 12px; font-family: var(--mono); font-size: 10px; color: var(--mid-gray); overflow-x: auto; white-space: pre-wrap; word-break: break-all; max-height: 260px; overflow-y: auto; }
+.admin-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- WELCOME -->
+<div id="screen-welcome" class="screen active">
+  <div>
+    <svg class="logo" width="52" height="52" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M460.961 348.755C433.404 329.585 400.456 320 362.116 320C323.775 320 290.827 329.585 263.27 348.755C235.713 367.526 214.945 393.485 200.967 426.633C186.989 459.782 180 497.722 180 540.456C180 583.189 186.989 621.13 200.967 654.278C214.945 687.426 235.713 713.585 263.27 732.755C290.827 751.526 323.775 760.911 362.116 760.911C400.456 760.911 433.404 751.526 460.961 732.755C488.518 713.585 509.286 687.426 523.264 654.278C537.242 621.13 544.231 583.189 544.231 540.456C544.231 497.722 537.242 459.782 523.264 426.633C509.286 393.485 488.518 367.526 460.961 348.755ZM414.009 422.583C400.621 408.51 383.323 401.473 362.116 401.473C333.76 401.473 312.194 414.053 297.417 439.214C283.039 464.375 275.85 498.122 275.85 540.456C275.85 567.032 278.683 590.224 284.349 610.032L414.009 422.583ZM309.841 658.28C323.459 672.386 340.884 679.439 362.116 679.439C390.471 679.439 411.838 666.858 426.216 641.698C440.992 616.537 448.381 582.79 448.381 540.456C448.381 513.799 445.451 490.547 439.592 470.699L309.841 658.28Z" fill="#FCFCFC"/>
+      <path d="M657.978 585.985L545.354 751.326H653.185L705.903 657.872C709.897 651.482 712.293 643.095 713.092 632.712C713.491 628.718 714.29 625.723 715.488 623.726C716.686 621.329 719.082 620.131 722.677 620.131C728.268 620.131 731.463 623.726 732.262 630.915V632.712C733.061 643.095 735.457 651.482 739.451 657.872L792.168 751.326H900L787.376 585.985L890.415 435.02H782.583L739.451 513.498C734.658 521.885 732.262 530.272 732.262 538.659C732.262 542.253 731.463 545.248 729.866 547.645C728.667 550.041 726.271 551.239 722.677 551.239C719.082 551.239 716.487 550.041 714.889 547.645C713.691 545.248 713.092 542.253 713.092 538.659C713.092 530.272 710.696 521.885 705.903 513.498L662.77 435.02H554.939L657.978 585.985Z" fill="#FCFCFC"/>
+    </svg>
+    <div class="welcome-eyebrow">Solana Accelerate 2026 · Miami</div>
+    <h1 class="welcome-title">How well do<br>you know<br><span class="muted">0x?</span></h1>
+    <p class="welcome-desc">5 questions. <strong>Wrong answers don't eliminate you</strong> — every answer teaches you something. Finish to claim your swag.</p>
+    <div class="prize-pill">🏆 &nbsp;Complete to claim exclusive 0x swag</div>
+  </div>
+  <div>
+    <div class="divider"></div>
+    <button class="btn-primary" onclick="startQuiz()">Begin the quiz →</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="screen-quiz" class="screen">
+  <div class="quiz-top">
+    <div class="quiz-topbar">
+      <svg width="36" height="36" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M460.961 348.755C433.404 329.585 400.456 320 362.116 320C323.775 320 290.827 329.585 263.27 348.755C235.713 367.526 214.945 393.485 200.967 426.633C186.989 459.782 180 497.722 180 540.456C180 583.189 186.989 621.13 200.967 654.278C214.945 687.426 235.713 713.585 263.27 732.755C290.827 751.526 323.775 760.911 362.116 760.911C400.456 760.911 433.404 751.526 460.961 732.755C488.518 713.585 509.286 687.426 523.264 654.278C537.242 621.13 544.231 583.189 544.231 540.456C544.231 497.722 537.242 459.782 523.264 426.633C509.286 393.485 488.518 367.526 460.961 348.755ZM414.009 422.583C400.621 408.51 383.323 401.473 362.116 401.473C333.76 401.473 312.194 414.053 297.417 439.214C283.039 464.375 275.85 498.122 275.85 540.456C275.85 567.032 278.683 590.224 284.349 610.032L414.009 422.583ZM309.841 658.28C323.459 672.386 340.884 679.439 362.116 679.439C390.471 679.439 411.838 666.858 426.216 641.698C440.992 616.537 448.381 582.79 448.381 540.456C448.381 513.799 445.451 490.547 439.592 470.699L309.841 658.28Z" fill="#FCFCFC"/>
+        <path d="M657.978 585.985L545.354 751.326H653.185L705.903 657.872C709.897 651.482 712.293 643.095 713.092 632.712C713.491 628.718 714.29 625.723 715.488 623.726C716.686 621.329 719.082 620.131 722.677 620.131C728.268 620.131 731.463 623.726 732.262 630.915V632.712C733.061 643.095 735.457 651.482 739.451 657.872L792.168 751.326H900L787.376 585.985L890.415 435.02H782.583L739.451 513.498C734.658 521.885 732.262 530.272 732.262 538.659C732.262 542.253 731.463 545.248 729.866 547.645C728.667 550.041 726.271 551.239 722.677 551.239C719.082 551.239 716.487 550.041 714.889 547.645C713.691 545.248 713.092 542.253 713.092 538.659C713.092 530.272 710.696 521.885 705.903 513.498L662.77 435.02H554.939L657.978 585.985Z" fill="#FCFCFC"/>
+      </svg>
+      <div class="q-counter" id="q-counter">1 / 5</div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+  <div class="quiz-body">
+    <div class="multi-badge" id="multi-badge">Select all that apply</div>
+    <div class="question-text" id="question-text"></div>
+    <div class="options-list" id="options-list"></div>
+    <div class="reveal-panel" id="reveal-panel">
+      <div class="reveal-title" id="reveal-title"></div>
+      <div id="reveal-body"></div>
+    </div>
+  </div>
+  <div class="quiz-footer">
+    <button class="action-btn" id="action-btn" onclick="handleAction()">Check answer</button>
+  </div>
+</div>
+
+<!-- FORM -->
+<div id="screen-form" class="screen">
+  <svg width="44" height="44" style="margin-bottom:28px;" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M460.961 348.755C433.404 329.585 400.456 320 362.116 320C323.775 320 290.827 329.585 263.27 348.755C235.713 367.526 214.945 393.485 200.967 426.633C186.989 459.782 180 497.722 180 540.456C180 583.189 186.989 621.13 200.967 654.278C214.945 687.426 235.713 713.585 263.27 732.755C290.827 751.526 323.775 760.911 362.116 760.911C400.456 760.911 433.404 751.526 460.961 732.755C488.518 713.585 509.286 687.426 523.264 654.278C537.242 621.13 544.231 583.189 544.231 540.456C544.231 497.722 537.242 459.782 523.264 426.633C509.286 393.485 488.518 367.526 460.961 348.755ZM414.009 422.583C400.621 408.51 383.323 401.473 362.116 401.473C333.76 401.473 312.194 414.053 297.417 439.214C283.039 464.375 275.85 498.122 275.85 540.456C275.85 567.032 278.683 590.224 284.349 610.032L414.009 422.583ZM309.841 658.28C323.459 672.386 340.884 679.439 362.116 679.439C390.471 679.439 411.838 666.858 426.216 641.698C440.992 616.537 448.381 582.79 448.381 540.456C448.381 513.799 445.451 490.547 439.592 470.699L309.841 658.28Z" fill="#FCFCFC"/>
+    <path d="M657.978 585.985L545.354 751.326H653.185L705.903 657.872C709.897 651.482 712.293 643.095 713.092 632.712C713.491 628.718 714.29 625.723 715.488 623.726C716.686 621.329 719.082 620.131 722.677 620.131C728.268 620.131 731.463 623.726 732.262 630.915V632.712C733.061 643.095 735.457 651.482 739.451 657.872L792.168 751.326H900L787.376 585.985L890.415 435.02H782.583L739.451 513.498C734.658 521.885 732.262 530.272 732.262 538.659C732.262 542.253 731.463 545.248 729.866 547.645C728.667 550.041 726.271 551.239 722.677 551.239C719.082 551.239 716.487 550.041 714.889 547.645C713.691 545.248 713.092 542.253 713.092 538.659C713.092 530.272 710.696 521.885 705.903 513.498L662.77 435.02H554.939L657.978 585.985Z" fill="#FCFCFC"/>
+  </svg>
+  <div class="score-pill" id="score-display">✓ Quiz complete</div>
+  <h2 class="form-title">Want to stay<br>in touch?</h2>
+  <p class="form-subtitle">Leave your details — no spam, just good stuff from 0x. Everything is optional.</p>
+  <div class="form-row">
+    <div><label class="form-label">First name <span class="opt">(opt)</span></label><input class="form-input" id="f-first" type="text" placeholder="Ada" autocomplete="given-name"></div>
+    <div><label class="form-label">Last name <span class="opt">(opt)</span></label><input class="form-input" id="f-last" type="text" placeholder="Lovelace" autocomplete="family-name"></div>
+  </div>
+  <div class="form-row">
+    <div><label class="form-label">Company <span class="opt">(opt)</span></label><input class="form-input" id="f-company" type="text" placeholder="Acme Protocol"></div>
+    <div><label class="form-label">Title <span class="opt">(opt)</span></label><input class="form-input" id="f-title" type="text" placeholder="Head of Buidl"></div>
+  </div>
+  <div class="form-group"><label class="form-label">Email <span class="opt">(optional)</span></label><input class="form-input" id="f-email" type="email" placeholder="ada@acme.xyz" autocomplete="email"></div>
+  <div class="form-group"><label class="form-label">Primary use case for 0x <span class="opt">(optional)</span></label>
+    <select class="form-select" id="f-usecase">
+      <option value="">Select one...</option>
+      <option>Wallet integration</option><option>DEX / trading app</option><option>DeFi protocol</option><option>Portfolio / analytics app</option><option>Research / learning</option><option>Other</option>
+    </select>
+  </div>
+  <div class="form-group"><label class="form-label">Anything else? <span class="opt">(optional)</span></label><textarea class="form-textarea" id="f-notes" placeholder="Questions, feedback, project ideas..."></textarea></div>
+  <div class="form-actions">
+    <button class="btn-primary" onclick="submitForm()">Get my trader card →</button>
+    <button class="btn-secondary" onclick="skipForm()">Skip</button>
+  </div>
+</div>
+
+<!-- COMPLETE -->
+<div id="screen-complete" class="screen">
+  <svg width="44" height="44" style="margin-bottom:28px;" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M460.961 348.755C433.404 329.585 400.456 320 362.116 320C323.775 320 290.827 329.585 263.27 348.755C235.713 367.526 214.945 393.485 200.967 426.633C186.989 459.782 180 497.722 180 540.456C180 583.189 186.989 621.13 200.967 654.278C214.945 687.426 235.713 713.585 263.27 732.755C290.827 751.526 323.775 760.911 362.116 760.911C400.456 760.911 433.404 751.526 460.961 732.755C488.518 713.585 509.286 687.426 523.264 654.278C537.242 621.13 544.231 583.189 544.231 540.456C544.231 497.722 537.242 459.782 523.264 426.633C509.286 393.485 488.518 367.526 460.961 348.755ZM414.009 422.583C400.621 408.51 383.323 401.473 362.116 401.473C333.76 401.473 312.194 414.053 297.417 439.214C283.039 464.375 275.85 498.122 275.85 540.456C275.85 567.032 278.683 590.224 284.349 610.032L414.009 422.583ZM309.841 658.28C323.459 672.386 340.884 679.439 362.116 679.439C390.471 679.439 411.838 666.858 426.216 641.698C440.992 616.537 448.381 582.79 448.381 540.456C448.381 513.799 445.451 490.547 439.592 470.699L309.841 658.28Z" fill="#FCFCFC"/>
+    <path d="M657.978 585.985L545.354 751.326H653.185L705.903 657.872C709.897 651.482 712.293 643.095 713.092 632.712C713.491 628.718 714.29 625.723 715.488 623.726C716.686 621.329 719.082 620.131 722.677 620.131C728.268 620.131 731.463 623.726 732.262 630.915V632.712C733.061 643.095 735.457 651.482 739.451 657.872L792.168 751.326H900L787.376 585.985L890.415 435.02H782.583L739.451 513.498C734.658 521.885 732.262 530.272 732.262 538.659C732.262 542.253 731.463 545.248 729.866 547.645C728.667 550.041 726.271 551.239 722.677 551.239C719.082 551.239 716.487 550.041 714.889 547.645C713.691 545.248 713.092 542.253 713.092 538.659C713.092 530.272 710.696 521.885 705.903 513.498L662.77 435.02H554.939L657.978 585.985Z" fill="#FCFCFC"/>
+  </svg>
+
+  <div class="trader-card">
+    <div class="trader-tag">0x Trader Profile · Solana Accelerate 2026</div>
+    <div id="card-loading" class="loading-card">Generating your card <div class="dot-pulse"><span></span><span></span><span></span></div></div>
+    <div id="card-content" style="display:none;">
+      <div class="trader-archetype" id="card-archetype"></div>
+      <div class="trader-desc" id="card-desc"></div>
+      <div class="trader-stats">
+        <div><div class="stat-val" id="card-score-val"></div><div class="stat-label">Score</div></div>
+        <div><div class="stat-val" id="card-rank"></div><div class="stat-label">Rank</div></div>
+        <div><div class="stat-val" id="card-trait"></div><div class="stat-label">Power</div></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="completion-title">You're done.</h2>
+  <div class="swag-instruction">
+    <div class="swag-instruction-icon">👋</div>
+    <div>Show this screen at the booth to claim your swag. Come say hi — the 0x team is right here.</div>
+  </div>
+  <button class="btn-secondary" style="margin-top:16px;" onclick="resetQuiz()">Start over</button>
+</div>
+
+</div><!-- .app -->
+
+<button class="admin-btn" onclick="openAdmin()">admin</button>
+<div class="admin-overlay" id="admin-overlay">
+  <div class="admin-inner">
+    <h2>Submissions</h2>
+    <pre id="admin-data">Loading...</pre>
+    <div class="admin-actions">
+      <button class="btn-primary" onclick="downloadCSV()" style="font-size:14px;padding:14px;">Download CSV</button>
+      <button class="btn-secondary" onclick="clearData()" style="font-size:13px;padding:12px;">Clear all data</button>
+      <button class="btn-secondary" onclick="closeAdmin()" style="font-size:13px;padding:12px;">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const Q = [
+  { text:"What is 0x best known for?", options:["Providing infrastructure for crypto trading","Running a decentralized social network","Managing cloud servers","Software for managing electric scooters"], correct:[0], multi:false, exp:"0x is developer infrastructure for building financial products on crypto rails. Its APIs power token swaps in hundreds of apps — Coinbase Wallet, MetaMask, Zerion, and more." },
+  { text:"What technical problem does 0x solve?", options:["Liquidity fragmentation across decentralized exchanges","Slow Wi-Fi at crypto conferences","Reliable, scalable RPC infra without running your own nodes","Automating crypto tax tracking across wallets and chains"], correct:[0], multi:false, exp:"0x aggregates liquidity across many DEXes to find the best possible execution price — solving the fragmentation that makes trading on individual venues expensive and slow." },
+  { text:"Which of these is NOT a feature of 0x Swap API?", options:["Ability to add multiple fee recipients","Swap & send — send tokens to a different address after selling","Choose whether to collect fees in the buy or sell token","Onchain price oracles for major tokens and pairs"], correct:[3], multi:false, exp:"0x Swap API supports multiple fee recipients, swap & send, and flexible fee token selection. Onchain price oracles are a different product category entirely." },
+  { text:"What are key benefits of integrating 0x?", options:["Faster go-to-market for apps that need trading features","Guaranteed 10x portfolio growth for your users","Access to the best available execution prices","Gas-efficient routing"], correct:[0,2,3], multi:true, exp:"0x speeds up development with ready-made swap infra, finds the best prices via aggregation, and cuts costs with efficient routing. Nobody can guarantee 10x returns — sorry!" },
+  { text:"Which networks does 0x support?", options:["Ethereum","Base","Solana","Sui"], correct:[0,1,2], multi:true, exp:"0x supports Ethereum, Base, and Solana — spanning both EVM and non-EVM chains. Solana support is part of what makes 0x uniquely positioned in a multichain world." }
+];
+
+let cQ=0, sel=new Set(), answered=false, scores=[], mode='submit';
+
+function startQuiz(){ cQ=0; scores=[]; sel=new Set(); answered=false; showScreen('quiz'); renderQ(); }
+
+function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-'+id).classList.add('active'); window.scrollTo(0,0); }
+
+function renderQ(){
+  const q=Q[cQ]; answered=false; sel=new Set(); mode='submit';
+  document.getElementById('progress-fill').style.width=((cQ/Q.length)*100)+'%';
+  document.getElementById('q-counter').textContent=(cQ+1)+' / '+Q.length;
+  document.getElementById('multi-badge').classList.toggle('visible',q.multi);
+  document.getElementById('question-text').textContent=q.text;
+  const list=document.getElementById('options-list'); list.innerHTML='';
+  q.options.forEach((opt,i)=>{ const b=document.createElement('button'); b.className='option-btn'; b.id='opt-'+i; b.onclick=()=>tap(i); b.innerHTML=`<span class="option-letter">${['A','B','C','D'][i]}</span><span>${opt}</span>`; list.appendChild(b); });
+  document.getElementById('reveal-panel').classList.remove('visible');
+  const ab=document.getElementById('action-btn'); ab.textContent='Check answer'; ab.className='action-btn'; ab.classList.remove('visible');
+}
+
+function tap(i){
+  if(answered)return;
+  const q=Q[cQ]; const b=document.getElementById('opt-'+i);
+  if(q.multi){ if(sel.has(i)){sel.delete(i);b.classList.remove('selected');}else{sel.add(i);b.classList.add('selected');} }
+  else{ sel.forEach(p=>document.getElementById('opt-'+p).classList.remove('selected')); sel=new Set([i]); b.classList.add('selected'); }
+  document.getElementById('action-btn').classList.toggle('visible',sel.size>0);
+}
+
+function handleAction(){ if(mode==='submit') submitA(); else nextQ(); }
+
+function submitA(){
+  if(answered||sel.size===0)return; answered=true;
+  const q=Q[cQ]; const cor=new Set(q.correct);
+  const ok=[...cor].every(c=>sel.has(c))&&[...sel].every(s=>cor.has(s));
+  q.options.forEach((_,i)=>{ const b=document.getElementById('opt-'+i); b.disabled=true; b.classList.remove('selected'); if(cor.has(i)){b.classList.add('correct');b.querySelector('.option-letter').textContent='✓';}else if(sel.has(i)){b.classList.add('wrong');b.querySelector('.option-letter').textContent='✗';} });
+  scores.push({q:cQ+1,correct:ok,selected:[...sel],answer:[...cor]});
+  burst(ok);
+  document.getElementById('reveal-title').textContent=ok?'✓ Correct!':'Not quite — here\'s the thing:';
+  document.getElementById('reveal-body').textContent=q.exp;
+  setTimeout(()=>document.getElementById('reveal-panel').classList.add('visible'),110);
+  const ab=document.getElementById('action-btn'); ab.textContent=cQ>=Q.length-1?'Finish →':'Next →'; ab.className='action-btn visible'; mode='next';
+}
+
+function nextQ(){
+  cQ++;
+  if(cQ>=Q.length){ const c=scores.filter(s=>s.correct).length; document.getElementById('score-display').textContent=`✓ ${c} / ${Q.length} correct`; document.getElementById('progress-fill').style.width='100%'; showScreen('form'); }
+  else{ const body=document.querySelector('.quiz-body'); body.style.cssText='transition:opacity 0.18s;opacity:0'; setTimeout(()=>{ renderQ(); body.style.opacity='1'; setTimeout(()=>body.style.cssText='',300); },180); }
+}
+
+async function submitForm(){ const d=getData(false); await save(d); showScreen('complete'); genCard(d); confetti(); }
+async function skipForm(){ const d=getData(true); await save(d); showScreen('complete'); genCard(d); confetti(); }
+
+function getData(empty){
+  const c=scores.filter(s=>s.correct).length;
+  return { submittedAt:new Date().toISOString(), firstName:empty?'':(document.getElementById('f-first').value||''), lastName:empty?'':(document.getElementById('f-last').value||''), company:empty?'':(document.getElementById('f-company').value||''), jobTitle:empty?'':(document.getElementById('f-title').value||''), email:empty?'':(document.getElementById('f-email').value||''), useCase:empty?'':(document.getElementById('f-usecase').value||''), notes:empty?'':(document.getElementById('f-notes').value||''), score:c, total:Q.length, answers:scores };
+}
+
+async function save(d){ try{ let l=[]; try{const r=await window.storage.get('submissions');l=JSON.parse(r.value);}catch(e){} l.push(d); await window.storage.set('submissions',JSON.stringify(l)); }catch(e){} }
+
+async function genCard(d){
+  const prompt=`Generate a personalized 0x Trader Card for a booth visitor at Solana Accelerate 2026 Miami.
+Name: ${d.firstName||'Visitor'}, Score: ${d.score}/${d.total}, Company: ${d.company||'unknown'}, Use case: ${d.useCase||'exploring'}
+Output ONLY valid JSON, no markdown:
+{"archetype":"2-4 word punchy DeFi archetype e.g. The Routing Oracle","description":"1-2 sharp fun sentences referencing score. Max 30 words.","rank":"1-3 word rank matching score ${d.score}/${d.total}","trait":"1-3 word superpower"}`;
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:250,messages:[{role:"user",content:prompt}]})});
+    const j=await r.json(); let t=(j.content.find(b=>b.type==='text')?.text||'').replace(/```json|```/g,'').trim(); const c=JSON.parse(t);
+    document.getElementById('card-loading').style.display='none'; document.getElementById('card-content').style.display='block';
+    document.getElementById('card-archetype').textContent=c.archetype; document.getElementById('card-desc').textContent=c.description;
+    document.getElementById('card-score-val').textContent=`${d.score}/${d.total}`; document.getElementById('card-rank').textContent=c.rank; document.getElementById('card-trait').textContent=c.trait;
+    try{ const r2=await window.storage.get('submissions'); const l=JSON.parse(r2.value); if(l.length){l[l.length-1].traderCard=c;await window.storage.set('submissions',JSON.stringify(l));} }catch(e){}
+  }catch(e){ document.getElementById('card-loading').innerHTML=`Score: ${d.score}/${d.total}`; }
+}
+
+function burst(ok){
+  const cols=ok?['#4ade80','#86efac','#fff']:['#f87171','#fca5a5','#fff'];
+  for(let i=0;i<18;i++){ const p=document.createElement('div'); p.className='particle'; const s=Math.random()*7+4; p.style.cssText=`width:${s}px;height:${s}px;background:${cols[i%cols.length]};left:${20+Math.random()*60}vw;top:${35+Math.random()*30}vh;--dx:${(Math.random()-.5)*160}px;--dy:${-Math.random()*130-40}px;`; document.body.appendChild(p); setTimeout(()=>p.remove(),950); }
+}
+
+function confetti(){
+  const cols=['#fff','#fbbf24','#4ade80','#60a5fa','#f472b6','#a78bfa'];
+  for(let i=0;i<65;i++) setTimeout(()=>{ const c=document.createElement('div'); c.className='confetti-piece'; const w=Math.random()*10+4,h=Math.random()*6+3; c.style.cssText=`width:${w}px;height:${h}px;background:${cols[Math.floor(Math.random()*cols.length)]};left:${Math.random()*100}vw;--dur:${Math.random()*2+2}s;--rot:${(Math.random()-.5)*720}deg;--drift:${(Math.random()-.5)*200}px;`; document.body.appendChild(c); setTimeout(()=>c.remove(),4500); },Math.random()*900);
+}
+
+function resetQuiz(){ showScreen('welcome'); }
+
+async function openAdmin(){
+  document.getElementById('admin-overlay').classList.add('open');
+  try{ let l=[]; try{const r=await window.storage.get('submissions');l=JSON.parse(r.value);}catch(e){} document.getElementById('admin-data').textContent=l.length?JSON.stringify(l,null,2):'No submissions yet.'; }catch(e){ document.getElementById('admin-data').textContent='Error.'; }
+}
+function closeAdmin(){ document.getElementById('admin-overlay').classList.remove('open'); }
+
+async function downloadCSV(){
+  let l=[]; try{const r=await window.storage.get('submissions');l=JSON.parse(r.value);}catch(e){}
+  if(!l.length){alert('No submissions yet.');return;}
+  const h=['submittedAt','firstName','lastName','company','jobTitle','email','useCase','notes','score','total','archetype','rank','trait'];
+  const rows=l.map(r=>h.map(k=>{ let v=k==='archetype'?r.traderCard?.archetype||'':k==='rank'?r.traderCard?.rank||'':k==='trait'?r.traderCard?.trait||'':r[k]??''; return `"${String(v).replace(/"/g,'""')}"`;}).join(','));
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([[h.join(','),...rows].join('\n')],{type:'text/csv'})); a.download='0x-quiz-leads-'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
+}
+
+async function clearData(){ if(!confirm('Delete all submissions?'))return; try{await window.storage.delete('submissions');}catch(e){} document.getElementById('admin-data').textContent='No submissions yet.'; }
+</script>
+</body>
+</html>
