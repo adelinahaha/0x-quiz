@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>0x Quiz — Solana Accelerate 2026</title>
+<title>0x Quiz - Solana Accelerate 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,15 +36,10 @@ body::before {
   z-index: 0;
 }
 .app { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
-
 .screen { display: none; flex-direction: column; flex: 1; }
 .screen.active { display: flex; animation: fadeUp 0.32s ease; }
 @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
-
-/* LOGO SVG */
 .logo { display: block; }
-
-/* ===== WELCOME ===== */
 #screen-welcome { justify-content: space-between; padding: 44px 24px 36px; min-height: 100vh; }
 .welcome-eyebrow { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--mid-gray); margin-top: 36px; margin-bottom: 18px; }
 .welcome-title { font-size: clamp(36px,10vw,52px); font-weight: 800; line-height: 1.0; letter-spacing: -2px; margin-bottom: 18px; }
@@ -53,25 +48,20 @@ body::before {
 .welcome-desc strong { color: var(--white); font-weight: 600; }
 .prize-pill { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--gold); background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.18); padding: 8px 14px; border-radius: 8px; margin-bottom: 36px; }
 .divider { height: 1px; background: rgba(255,255,255,0.07); margin-bottom: 22px; }
-
 .btn-primary { display: flex; align-items: center; justify-content: center; width: 100%; background: var(--white); color: #1c1d20; font-family: var(--font); font-size: 16px; font-weight: 800; padding: 18px 24px; border-radius: 14px; border: none; cursor: pointer; letter-spacing: -0.3px; transition: transform 0.1s, opacity 0.1s; -webkit-tap-highlight-color: transparent; }
 .btn-primary:active { transform: scale(0.97); opacity: 0.9; }
 .btn-secondary { display: flex; align-items: center; justify-content: center; width: 100%; background: transparent; color: var(--white); font-family: var(--font); font-size: 15px; font-weight: 600; padding: 14px 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.14); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background 0.1s; }
 .btn-secondary:active { background: rgba(255,255,255,0.06); }
-
-/* ===== QUIZ ===== */
 #screen-quiz { padding: 0; min-height: 100vh; }
 .quiz-top { padding: 18px 20px 14px; position: sticky; top: 0; background: var(--off-black); z-index: 10; }
 .quiz-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .q-counter { font-family: var(--mono); font-size: 12px; color: var(--mid-gray); }
 .progress-track { height: 2px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
 .progress-fill { height: 100%; background: var(--white); border-radius: 2px; transition: width 0.45s cubic-bezier(0.4,0,0.2,1); }
-
 .quiz-body { padding: 20px 20px 120px; flex: 1; }
 .multi-badge { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.2); padding: 4px 10px; border-radius: 6px; margin-bottom: 14px; display: inline-block; opacity: 0; transition: opacity 0.3s; }
 .multi-badge.visible { opacity: 1; }
 .question-text { font-size: clamp(20px,5.5vw,26px); font-weight: 700; line-height: 1.2; letter-spacing: -0.5px; margin-bottom: 22px; }
-
 .options-list { display: flex; flex-direction: column; gap: 10px; }
 .option-btn { display: flex; align-items: flex-start; gap: 14px; padding: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.09); border-radius: 14px; cursor: pointer; text-align: left; color: var(--white); font-family: var(--font); font-size: 15px; font-weight: 400; line-height: 1.45; width: 100%; -webkit-tap-highlight-color: transparent; min-height: 54px; transition: border-color 0.1s, background 0.1s; }
 .option-btn:active:not(:disabled) { background: rgba(255,255,255,0.06); }
@@ -84,21 +74,15 @@ body::before {
 .option-btn.wrong .option-letter { color: var(--red) !important; }
 @keyframes correctPulse { 0%{transform:scale(1)} 35%{transform:scale(1.018)} 65%{transform:scale(0.998)} 100%{transform:scale(1)} }
 @keyframes wrongShake { 0%{transform:translateX(0)} 20%{transform:translateX(-7px)} 40%{transform:translateX(7px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} 100%{transform:translateX(0)} }
-
 .reveal-panel { margin-top: 14px; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; font-size: 13px; line-height: 1.65; color: rgba(252,252,252,0.5); opacity: 0; transform: translateY(6px); transition: opacity 0.3s, transform 0.3s; }
 .reveal-panel.visible { opacity: 1; transform: translateY(0); }
 .reveal-title { font-weight: 700; font-size: 13px; color: var(--white); margin-bottom: 4px; }
-
 .quiz-footer { position: fixed; bottom: 0; left: 0; right: 0; padding: 12px 20px 30px; background: linear-gradient(to top, var(--off-black) 70%, transparent); z-index: 20; }
 .action-btn { display: flex; align-items: center; justify-content: center; width: 100%; font-family: var(--font); font-size: 16px; font-weight: 800; padding: 18px 24px; border-radius: 14px; border: none; cursor: pointer; letter-spacing: -0.3px; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.1s; -webkit-tap-highlight-color: transparent; background: var(--white); color: #1c1d20; }
 .action-btn.visible { opacity: 1; pointer-events: all; }
 .action-btn:active { transform: scale(0.97); }
-
-/* particles */
 .particle { position: fixed; pointer-events: none; z-index: 100; border-radius: 50%; animation: pFly 0.9s ease-out forwards; }
 @keyframes pFly { 0%{transform:translate(0,0) scale(1);opacity:1} 100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0} }
-
-/* ===== FORM ===== */
 #screen-form { padding: 44px 24px 48px; min-height: 100vh; }
 .score-pill { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; color: var(--green); background: rgba(74,222,128,0.09); border: 1px solid rgba(74,222,128,0.2); padding: 6px 12px; border-radius: 8px; margin-bottom: 18px; }
 .form-title { font-size: 30px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 8px; line-height: 1.1; }
@@ -114,8 +98,6 @@ body::before {
 .form-select option { background: #26272B; color: #FCFCFC; }
 .form-textarea { resize: vertical; min-height: 80px; }
 .form-actions { margin-top: 26px; display: flex; flex-direction: column; gap: 10px; }
-
-/* ===== COMPLETE ===== */
 #screen-complete { padding: 44px 24px 48px; min-height: 100vh; }
 .trader-card { border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 26px 22px; background: rgba(255,255,255,0.03); margin-bottom: 28px; position: relative; overflow: hidden; }
 .trader-card::after { content:''; position:absolute; top:-60px; right:-60px; width:160px; height:160px; background:radial-gradient(circle,rgba(255,255,255,0.04) 0%,transparent 70%); border-radius:50%; pointer-events:none; }
@@ -131,16 +113,16 @@ body::before {
 .dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
 .dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes dotB { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
-
 .completion-title { font-size: 30px; font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; }
 .swag-instruction { display: flex; align-items: flex-start; gap: 14px; background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 16px; padding: 20px; font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--white); margin-bottom: 0; }
 .swag-instruction-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
-
-/* confetti */
+.share-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.share-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 16px; border-radius: 12px; font-family: var(--font); font-size: 14px; font-weight: 700; cursor: pointer; border: none; transition: transform 0.1s, opacity 0.1s; -webkit-tap-highlight-color: transparent; }
+.share-btn:active { transform: scale(0.96); opacity: 0.85; }
+.share-x { background: var(--white); color: #1c1d20; }
+.share-download { background: rgba(255,255,255,0.07); color: var(--white); border: 1px solid rgba(255,255,255,0.14); }
 .confetti-piece { position: fixed; z-index: 200; pointer-events: none; border-radius: 2px; animation: cFall var(--dur) linear forwards; }
 @keyframes cFall { 0%{transform:translateY(-20px) rotate(0deg) translateX(0);opacity:1} 100%{transform:translateY(110vh) rotate(var(--rot)) translateX(var(--drift));opacity:0} }
-
-/* admin */
 .admin-btn { position: fixed; bottom: 12px; right: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); color: rgba(107,108,112,0.5); font-family: var(--mono); font-size: 9px; padding: 5px 10px; border-radius: 6px; cursor: pointer; z-index: 50; -webkit-tap-highlight-color: transparent; }
 .admin-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 300; padding: 20px; overflow-y: auto; }
 .admin-overlay.open { display: block; }
@@ -162,7 +144,7 @@ body::before {
     </svg>
     <div class="welcome-eyebrow">Solana Accelerate 2026 · Miami</div>
     <h1 class="welcome-title">How well do<br>you know<br><span class="muted">0x?</span></h1>
-    <p class="welcome-desc">5 questions. <strong>Wrong answers don't eliminate you</strong> — every answer teaches you something. Finish to claim your swag.</p>
+    <p class="welcome-desc">5 questions. <strong>Wrong answers don't eliminate you</strong> - every answer teaches you something. Finish to claim your swag.</p>
     <div class="prize-pill">🏆 &nbsp;Complete to claim exclusive 0x swag</div>
   </div>
   <div>
@@ -205,7 +187,7 @@ body::before {
   </svg>
   <div class="score-pill" id="score-display">✓ Quiz complete</div>
   <h2 class="form-title">Want to stay<br>in touch?</h2>
-  <p class="form-subtitle">Leave your details — no spam, just good stuff from 0x. Everything is optional.</p>
+  <p class="form-subtitle">Leave your details - no spam, just good stuff from 0x. Everything is optional.</p>
   <div class="form-row">
     <div><label class="form-label">First name <span class="opt">(opt)</span></label><input class="form-input" id="f-first" type="text" placeholder="Ada" autocomplete="given-name"></div>
     <div><label class="form-label">Last name <span class="opt">(opt)</span></label><input class="form-input" id="f-last" type="text" placeholder="Lovelace" autocomplete="family-name"></div>
@@ -234,7 +216,6 @@ body::before {
     <path fill-rule="evenodd" clip-rule="evenodd" d="M460.961 348.755C433.404 329.585 400.456 320 362.116 320C323.775 320 290.827 329.585 263.27 348.755C235.713 367.526 214.945 393.485 200.967 426.633C186.989 459.782 180 497.722 180 540.456C180 583.189 186.989 621.13 200.967 654.278C214.945 687.426 235.713 713.585 263.27 732.755C290.827 751.526 323.775 760.911 362.116 760.911C400.456 760.911 433.404 751.526 460.961 732.755C488.518 713.585 509.286 687.426 523.264 654.278C537.242 621.13 544.231 583.189 544.231 540.456C544.231 497.722 537.242 459.782 523.264 426.633C509.286 393.485 488.518 367.526 460.961 348.755ZM414.009 422.583C400.621 408.51 383.323 401.473 362.116 401.473C333.76 401.473 312.194 414.053 297.417 439.214C283.039 464.375 275.85 498.122 275.85 540.456C275.85 567.032 278.683 590.224 284.349 610.032L414.009 422.583ZM309.841 658.28C323.459 672.386 340.884 679.439 362.116 679.439C390.471 679.439 411.838 666.858 426.216 641.698C440.992 616.537 448.381 582.79 448.381 540.456C448.381 513.799 445.451 490.547 439.592 470.699L309.841 658.28Z" fill="#FCFCFC"/>
     <path d="M657.978 585.985L545.354 751.326H653.185L705.903 657.872C709.897 651.482 712.293 643.095 713.092 632.712C713.491 628.718 714.29 625.723 715.488 623.726C716.686 621.329 719.082 620.131 722.677 620.131C728.268 620.131 731.463 623.726 732.262 630.915V632.712C733.061 643.095 735.457 651.482 739.451 657.872L792.168 751.326H900L787.376 585.985L890.415 435.02H782.583L739.451 513.498C734.658 521.885 732.262 530.272 732.262 538.659C732.262 542.253 731.463 545.248 729.866 547.645C728.667 550.041 726.271 551.239 722.677 551.239C719.082 551.239 716.487 550.041 714.889 547.645C713.691 545.248 713.092 542.253 713.092 538.659C713.092 530.272 710.696 521.885 705.903 513.498L662.77 435.02H554.939L657.978 585.985Z" fill="#FCFCFC"/>
   </svg>
-
   <div class="trader-card">
     <div class="trader-tag">0x Trader Profile · Solana Accelerate 2026</div>
     <div id="card-loading" class="loading-card">Generating your card <div class="dot-pulse"><span></span><span></span><span></span></div></div>
@@ -248,16 +229,25 @@ body::before {
       </div>
     </div>
   </div>
-
   <h2 class="completion-title">You're done.</h2>
   <div class="swag-instruction">
     <div class="swag-instruction-icon">👋</div>
-    <div>Show this screen at the booth to claim your swag. Come say hi — the 0x team is right here.</div>
+    <div>Show this screen at the booth to claim your swag. Come say hi - the 0x team is right here.</div>
   </div>
-  <button class="btn-secondary" style="margin-top:16px;" onclick="resetQuiz()">Start over</button>
+  <div class="share-row">
+    <button class="share-btn share-x" onclick="shareOnX()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.912-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      Share on X
+    </button>
+    <button class="share-btn share-download" id="download-btn" onclick="downloadCard()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Save card
+    </button>
+  </div>
+  <button class="btn-secondary" style="margin-top:8px;" onclick="resetQuiz()">Start over</button>
 </div>
 
-</div><!-- .app -->
+</div>
 
 <button class="admin-btn" onclick="openAdmin()">admin</button>
 <div class="admin-overlay" id="admin-overlay">
@@ -274,11 +264,11 @@ body::before {
 
 <script>
 const Q = [
-  { text:"What is 0x best known for?", options:["Providing infrastructure for crypto trading","Running a decentralized social network","Managing cloud servers","Software for managing electric scooters"], correct:[0], multi:false, exp:"0x is developer infrastructure for building financial products on crypto rails. Its APIs power token swaps in hundreds of apps — Coinbase Wallet, MetaMask, Zerion, and more." },
-  { text:"What technical problem does 0x solve?", options:["Liquidity fragmentation across decentralized exchanges","Slow Wi-Fi at crypto conferences","Reliable, scalable RPC infra without running your own nodes","Automating crypto tax tracking across wallets and chains"], correct:[0], multi:false, exp:"0x aggregates liquidity across many DEXes to find the best possible execution price — solving the fragmentation that makes trading on individual venues expensive and slow." },
-  { text:"Which of these is NOT a feature of 0x Swap API?", options:["Ability to add multiple fee recipients","Swap & send — send tokens to a different address after selling","Choose whether to collect fees in the buy or sell token","Onchain price oracles for major tokens and pairs"], correct:[3], multi:false, exp:"0x Swap API supports multiple fee recipients, swap & send, and flexible fee token selection. Onchain price oracles are a different product category entirely." },
-  { text:"What are key benefits of integrating 0x?", options:["Faster go-to-market for apps that need trading features","Guaranteed 10x portfolio growth for your users","Access to the best available execution prices","Gas-efficient routing"], correct:[0,2,3], multi:true, exp:"0x speeds up development with ready-made swap infra, finds the best prices via aggregation, and cuts costs with efficient routing. Nobody can guarantee 10x returns — sorry!" },
-  { text:"Which networks does 0x support?", options:["Ethereum","Base","Solana","Sui"], correct:[0,1,2], multi:true, exp:"0x supports Ethereum, Base, and Solana — spanning both EVM and non-EVM chains. Solana support is part of what makes 0x uniquely positioned in a multichain world." }
+  { text:"What is 0x best known for?", options:["Providing infrastructure for crypto trading","Running a decentralized social network","Managing cloud servers","Software for managing electric scooters"], correct:[0], multi:false, exp:"0x is developer infrastructure for building financial products on crypto rails. Its APIs power token swaps in hundreds of apps - Coinbase Wallet, MetaMask, Zerion, and more." },
+  { text:"What technical problem does 0x solve?", options:["Liquidity fragmentation across decentralized exchanges","Slow Wi-Fi at crypto conferences","Reliable, scalable RPC infra without running your own nodes","Automating crypto tax tracking across wallets and chains"], correct:[0], multi:false, exp:"0x aggregates liquidity across many DEXes to find the best possible execution price - solving the fragmentation that makes trading on individual venues expensive and slow." },
+  { text:"Which of these is NOT a feature of 0x Swap API?", options:["Ability to add multiple fee recipients","Swap & send - send tokens to a different address after selling","Choose whether to collect fees in the buy or sell token","Onchain price oracles for major tokens and pairs"], correct:[3], multi:false, exp:"0x Swap API supports multiple fee recipients, swap & send, and flexible fee token selection. Onchain price oracles are a different product category entirely." },
+  { text:"What are key benefits of integrating 0x?", options:["Faster go-to-market for apps that need trading features","Guaranteed 10x portfolio growth for your users","Access to the best available execution prices","Gas-efficient routing"], correct:[0,2,3], multi:true, exp:"0x speeds up development with ready-made swap infra, finds the best prices via aggregation, and cuts costs with efficient routing. Nobody can guarantee 10x returns - sorry!" },
+  { text:"Which networks does 0x support?", options:["Ethereum","Base","Solana","Sui"], correct:[0,1,2], multi:true, exp:"0x supports Ethereum, Base, and Solana - spanning both EVM and non-EVM chains. Solana support is part of what makes 0x uniquely positioned in a multichain world." }
 ];
 
 let cQ=0, sel=new Set(), answered=false, scores=[], mode='submit';
@@ -316,7 +306,7 @@ function submitA(){
   q.options.forEach((_,i)=>{ const b=document.getElementById('opt-'+i); b.disabled=true; b.classList.remove('selected'); if(cor.has(i)){b.classList.add('correct');b.querySelector('.option-letter').textContent='✓';}else if(sel.has(i)){b.classList.add('wrong');b.querySelector('.option-letter').textContent='✗';} });
   scores.push({q:cQ+1,correct:ok,selected:[...sel],answer:[...cor]});
   burst(ok);
-  document.getElementById('reveal-title').textContent=ok?'✓ Correct!':'Not quite — here\'s the thing:';
+  document.getElementById('reveal-title').textContent=ok?'✓ Correct!':'Not quite - here\'s the thing:';
   document.getElementById('reveal-body').textContent=q.exp;
   setTimeout(()=>document.getElementById('reveal-panel').classList.add('visible'),110);
   const ab=document.getElementById('action-btn'); ab.textContent=cQ>=Q.length-1?'Finish →':'Next →'; ab.className='action-btn visible'; mode='next';
@@ -328,26 +318,79 @@ function nextQ(){
   else{ const body=document.querySelector('.quiz-body'); body.style.cssText='transition:opacity 0.18s;opacity:0'; setTimeout(()=>{ renderQ(); body.style.opacity='1'; setTimeout(()=>body.style.cssText='',300); },180); }
 }
 
-async function submitForm(){ const d=getData(false); await save(d); showScreen('complete'); genCard(d); confetti(); }
-async function skipForm(){ const d=getData(true); await save(d); showScreen('complete'); genCard(d); confetti(); }
+async function submitForm(){ const d=getData(false); const card=assignCard(d); d.traderCard=card; await save(d); showScreen('complete'); showCard(card,d); confetti(); }
+async function skipForm(){ const d=getData(true); const card=assignCard(d); d.traderCard=card; await save(d); showScreen('complete'); showCard(card,d); confetti(); }
 
 function getData(empty){
   const c=scores.filter(s=>s.correct).length;
   return { submittedAt:new Date().toISOString(), firstName:empty?'':(document.getElementById('f-first').value||''), lastName:empty?'':(document.getElementById('f-last').value||''), company:empty?'':(document.getElementById('f-company').value||''), jobTitle:empty?'':(document.getElementById('f-title').value||''), email:empty?'':(document.getElementById('f-email').value||''), useCase:empty?'':(document.getElementById('f-usecase').value||''), notes:empty?'':(document.getElementById('f-notes').value||''), score:c, total:Q.length, answers:scores };
 }
 
-async function save(d){ try{ let l=[]; try{const r=await window.storage.get('submissions');l=JSON.parse(r.value);}catch(e){} l.push(d); await window.storage.set('submissions',JSON.stringify(l)); }catch(e){} }
+async function save(d){
+  try {
+    await fetch('https://api.airtable.com/v0/appNpaQ3pelTpKkU0/tblXwSxmW4aSi7QwJ', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer pathh070E78c0n3W3.07076eca7b13e8e64725e050b07f49e14de0731117011a81eeb2d0b1d6aacc34',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        fields: {
+          'First Name': d.firstName,
+          'Last Name': d.lastName,
+          'Company': d.company,
+          'Job Title': d.jobTitle,
+          'Email': d.email,
+          'Use Case': d.useCase,
+          'Notes': d.notes,
+          'Score': String(d.score) + ' / ' + String(d.total),
+          'Archetype': d.traderCard?.archetype || '',
+          'Submitted At': d.submittedAt
+        }
+      })
+    });
+  } catch(e) { console.error('Airtable error', e); }
+}
 
-async function genCard(d){
-  try{
-    const r=await fetch('/api/generate-card',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({firstName:d.firstName,score:d.score,total:d.total,company:d.company,useCase:d.useCase})});
-    const c=await r.json();
-    if(c.error) throw new Error(c.error);
-    document.getElementById('card-loading').style.display='none'; document.getElementById('card-content').style.display='block';
-    document.getElementById('card-archetype').textContent=c.archetype; document.getElementById('card-desc').textContent=c.description;
-    document.getElementById('card-score-val').textContent=`${d.score}/${d.total}`; document.getElementById('card-rank').textContent=c.rank; document.getElementById('card-trait').textContent=c.trait;
-    try{ const r2=await window.storage.get('submissions'); const l=JSON.parse(r2.value); if(l.length){l[l.length-1].traderCard=c;await window.storage.set('submissions',JSON.stringify(l));} }catch(e){}
-  }catch(e){ document.getElementById('card-loading').innerHTML=`Score: ${d.score}/${d.total}`; }
+const CARDS = [
+  { archetype:"The Routing Oracle", description:"Checks three aggregators before breakfast. Still manually verifies the route.", rank:"Execution God", trait:"Price Oracle" },
+  { archetype:"The Liquidity Architect", description:"Has a mental map of every pool on every chain. Updates it in the shower.", rank:"Routing Master", trait:"MEV Shield" },
+  { archetype:"The Gas Whisperer", description:"Will delay a transaction by 45 minutes to save $0.03 in gas. No regrets.", rank:"Chain Optimizer", trait:"Gas Saver" },
+  { archetype:"The MEV Slayer", description:"Sees a sandwich attack in the mempool and takes it personally. Has a blocklist.", rank:"Dark Pool Hunter", trait:"MEV Shield" },
+  { archetype:"The Chain Hopper", description:"Has bridged to chains that don't have a block explorer yet. EVM, SVM, whatever ships next.", rank:"Cross-chain Pro", trait:"Chain Agnostic" },
+  { archetype:"The Aggregation Monk", description:"Ran the same swap on four different aggregators to see who filled 0.2 bps better. It was 0x.", rank:"Liquidity Sage", trait:"Best Price" },
+  { archetype:"The Protocol Whisperer", description:"Integrated the API before the docs page was indexed. Filed a typo fix on the way out.", rank:"API Native", trait:"Fast Builder" },
+  { archetype:"The Fee Optimizer", description:"Monetizes every swap. Users don't notice. Finance does.", rank:"Revenue Engineer", trait:"Fee Flow" },
+  { archetype:"The Swap Surgeon", description:"Has a spreadsheet tracking slippage to the fourth decimal. Updates it weekly. By hand.", rank:"Slippage Slayer", trait:"Precision" },
+  { archetype:"The DeFi Pioneer", description:"Remembers when gas was 200 gwei and you were grateful for it. Still here.", rank:"OG Builder", trait:"Deep Knowledge" },
+  { archetype:"The Execution Phantom", description:"Fills so clean the block explorer barely registers them. You've traded against this person and didn't know it.", rank:"Stealth Trader", trait:"Execution Speed" },
+  { archetype:"The Liquidity Detective", description:"Found a pricing discrepancy across two pools at 3am. Closed it before anyone woke up.", rank:"Price Hunter", trait:"Arbitrage Eye" },
+  { archetype:"The Bridge Builder", description:"Connects chains, protocols, and teams. Has more RPCs saved than bookmarks.", rank:"Integration Pro", trait:"Cross-chain" },
+  { archetype:"The Mempool Mystic", description:"Reads pending transactions the way other people read the news. Rarely surprised.", rank:"Block Whisperer", trait:"Mempool Vision" },
+  { archetype:"The Yield Cartographer", description:"Maps every route so others don't have to. Sends unsolicited diagrams in group chats.", rank:"DeFi Navigator", trait:"Yield Finder" },
+  { archetype:"The Smart Router", description:"Never takes the obvious path. Somehow finds the one route with 40% less price impact.", rank:"Path Optimizer", trait:"Smart Routes" },
+  { archetype:"The Gasless Visionary", description:"Thinks requiring ETH to use ETH is a UX crime. Building accordingly.", rank:"UX Champion", trait:"Gasless Flow" },
+  { archetype:"The API Architect", description:"Clean code, clean integrations, opinions about error handling you didn't ask for.", rank:"Integration God", trait:"Clean Code" },
+  { archetype:"The Volume Conductor", description:"Moves more daily volume than some L2s. Treats it like a Tuesday.", rank:"Volume Master", trait:"Flow State" },
+  { archetype:"The DeFi Initiate", description:"Just deployed a first swap. Already reading the advanced docs. Give it a month.", rank:"Rising Builder", trait:"Curiosity" }
+];
+
+function assignCard(d){
+  const ratio = d.score / d.total;
+  const pool = ratio >= 0.6 ? CARDS.slice(0, 15) : CARDS;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function showCard(c, d){
+  setTimeout(() => {
+    document.getElementById('card-loading').style.display='none';
+    document.getElementById('card-content').style.display='block';
+    document.getElementById('card-archetype').textContent=c.archetype;
+    document.getElementById('card-desc').textContent=c.description;
+    document.getElementById('card-score-val').textContent=`${d.score}/${d.total}`;
+    document.getElementById('card-rank').textContent=c.rank;
+    document.getElementById('card-trait').textContent=c.trait;
+  }, 1800);
 }
 
 function burst(ok){
@@ -362,21 +405,43 @@ function confetti(){
 
 function resetQuiz(){ showScreen('welcome'); }
 
+let currentCard = null;
+
+function shareOnX(){
+  const archetype = document.getElementById('card-archetype').textContent || 'a DeFi trader';
+  const score = document.getElementById('card-score-val').textContent || '';
+  const quizUrl = window.location.href.split('?')[0];
+  const text = `Just took the 0x quiz at Solana Accelerate and I'm ${archetype} 🔮\n\nScored ${score} - how well do you know DeFi infra?\n\nTake the quiz → ${quizUrl}\n\n#0x #SolanaAccelerate #DeFi`;
+  window.open('https://x.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
+}
+
+async function downloadCard(){
+  const btn = document.getElementById('download-btn');
+  const originalHTML = btn.innerHTML;
+  btn.innerHTML = 'Saving...';
+  btn.disabled = true;
+  try {
+    const card = document.querySelector('.trader-card');
+    const canvas = await html2canvas(card, { backgroundColor: '#1c1d20', scale: 3, useCORS: true, logging: false });
+    const link = document.createElement('a');
+    link.download = '0x-trader-card.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  } catch(e) {
+    alert('Could not save image. Try a screenshot instead!');
+  }
+  btn.innerHTML = originalHTML;
+  btn.disabled = false;
+}
+
 async function openAdmin(){
   document.getElementById('admin-overlay').classList.add('open');
-  try{ let l=[]; try{const r=await window.storage.get('submissions');l=JSON.parse(r.value);}catch(e){} document.getElementById('admin-data').textContent=l.length?JSON.stringify(l,null,2):'No submissions yet.'; }catch(e){ document.getElementById('admin-data').textContent='Error.'; }
+  document.getElementById('admin-data').textContent = 'Data is now in Airtable - check airtable.com';
 }
 function closeAdmin(){ document.getElementById('admin-overlay').classList.remove('open'); }
-
-async function downloadCSV(){
-  let l=[]; try{const r=await window.storage.get('submissions');l=JSON.parse(r.value);}catch(e){}
-  if(!l.length){alert('No submissions yet.');return;}
-  const h=['submittedAt','firstName','lastName','company','jobTitle','email','useCase','notes','score','total','archetype','rank','trait'];
-  const rows=l.map(r=>h.map(k=>{ let v=k==='archetype'?r.traderCard?.archetype||'':k==='rank'?r.traderCard?.rank||'':k==='trait'?r.traderCard?.trait||'':r[k]??''; return `"${String(v).replace(/"/g,'""')}"`;}).join(','));
-  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([[h.join(','),...rows].join('\n')],{type:'text/csv'})); a.download='0x-quiz-leads-'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
-}
-
-async function clearData(){ if(!confirm('Delete all submissions?'))return; try{await window.storage.delete('submissions');}catch(e){} document.getElementById('admin-data').textContent='No submissions yet.'; }
+function downloadCSV(){ alert('Your data is live in Airtable. Export from there!'); }
+async function clearData(){ alert('Data lives in Airtable now - delete from there if needed.'); }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
