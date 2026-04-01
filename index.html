@@ -220,6 +220,7 @@ body::before {
     <div class="trader-tag">0x Trader Profile · Solana Accelerate 2026</div>
     <div id="card-loading" class="loading-card">Generating your card <div class="dot-pulse"><span></span><span></span><span></span></div></div>
     <div id="card-content" style="display:none;">
+      <img id="card-img" src="" alt="" style="width:100%;border-radius:10px;margin-bottom:14px;display:block;">
       <div class="trader-archetype" id="card-archetype"></div>
       <div class="trader-desc" id="card-desc"></div>
       <div class="trader-stats">
@@ -353,43 +354,56 @@ async function save(d){
 }
 
 const CARDS = [
-  { archetype:"The Routing Oracle", description:"Checks three aggregators before breakfast. Still manually verifies the route.", rank:"Execution God", trait:"Price Oracle" },
-  { archetype:"The Liquidity Architect", description:"Has a mental map of every pool on every chain. Updates it in the shower.", rank:"Routing Master", trait:"MEV Shield" },
-  { archetype:"The Gas Whisperer", description:"Will delay a transaction by 45 minutes to save $0.03 in gas. No regrets.", rank:"Chain Optimizer", trait:"Gas Saver" },
-  { archetype:"The MEV Slayer", description:"Sees a sandwich attack in the mempool and takes it personally. Has a blocklist.", rank:"Dark Pool Hunter", trait:"MEV Shield" },
-  { archetype:"The Chain Hopper", description:"Has bridged to chains that don't have a block explorer yet. EVM, SVM, whatever ships next.", rank:"Cross-chain Pro", trait:"Chain Agnostic" },
-  { archetype:"The Aggregation Monk", description:"Ran the same swap on four different aggregators to see who filled 0.2 bps better. It was 0x.", rank:"Liquidity Sage", trait:"Best Price" },
-  { archetype:"The Protocol Whisperer", description:"Integrated the API before the docs page was indexed. Filed a typo fix on the way out.", rank:"API Native", trait:"Fast Builder" },
-  { archetype:"The Fee Optimizer", description:"Monetizes every swap. Users don't notice. Finance does.", rank:"Revenue Engineer", trait:"Fee Flow" },
-  { archetype:"The Swap Surgeon", description:"Has a spreadsheet tracking slippage to the fourth decimal. Updates it weekly. By hand.", rank:"Slippage Slayer", trait:"Precision" },
-  { archetype:"The DeFi Pioneer", description:"Remembers when gas was 200 gwei and you were grateful for it. Still here.", rank:"OG Builder", trait:"Deep Knowledge" },
-  { archetype:"The Execution Phantom", description:"Fills so clean the block explorer barely registers them. You've traded against this person and didn't know it.", rank:"Stealth Trader", trait:"Execution Speed" },
-  { archetype:"The Liquidity Detective", description:"Found a pricing discrepancy across two pools at 3am. Closed it before anyone woke up.", rank:"Price Hunter", trait:"Arbitrage Eye" },
-  { archetype:"The Bridge Builder", description:"Connects chains, protocols, and teams. Has more RPCs saved than bookmarks.", rank:"Integration Pro", trait:"Cross-chain" },
-  { archetype:"The Mempool Mystic", description:"Reads pending transactions the way other people read the news. Rarely surprised.", rank:"Block Whisperer", trait:"Mempool Vision" },
-  { archetype:"The Yield Cartographer", description:"Maps every route so others don't have to. Sends unsolicited diagrams in group chats.", rank:"DeFi Navigator", trait:"Yield Finder" },
-  { archetype:"The Smart Router", description:"Never takes the obvious path. Somehow finds the one route with 40% less price impact.", rank:"Path Optimizer", trait:"Smart Routes" },
-  { archetype:"The Gasless Visionary", description:"Thinks requiring ETH to use ETH is a UX crime. Building accordingly.", rank:"UX Champion", trait:"Gasless Flow" },
-  { archetype:"The API Architect", description:"Clean code, clean integrations, opinions about error handling you didn't ask for.", rank:"Integration God", trait:"Clean Code" },
-  { archetype:"The Volume Conductor", description:"Moves more daily volume than some L2s. Treats it like a Tuesday.", rank:"Volume Master", trait:"Flow State" },
-  { archetype:"The DeFi Initiate", description:"Just deployed a first swap. Already reading the advanced docs. Give it a month.", rank:"Rising Builder", trait:"Curiosity" }
+  { tier:4, archetype:"The Routing Oracle", description:"Checks three aggregators before breakfast. Still manually verifies the route.", rank:"Execution God", trait:"Price Oracle", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054115/RoutingOracle_as16lw.jpg" },
+  { tier:4, archetype:"The Liquidity Architect", description:"Has a mental map of every pool on every chain. Updates it in the shower.", rank:"Routing Master", trait:"MEV Shield", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054117/Liquidity_architect_zzncl5.jpg" },
+  { tier:4, archetype:"The Gas Whisperer", description:"Will delay a transaction by 45 minutes to save $0.03 in gas. No regrets.", rank:"Chain Optimizer", trait:"Gas Saver", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054116/Gas_Whisperer_smtrmh.jpg" },
+  { tier:4, archetype:"The MEV Slayer", description:"Sees a sandwich attack in the mempool and takes it personally. Has a blocklist.", rank:"Dark Pool Hunter", trait:"MEV Shield", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054115/MEVslayer_kv5hd9.jpg" },
+  { tier:4, archetype:"The Execution Phantom", description:"Fills so clean the block explorer barely registers them. You've traded against this person and didn't know it.", rank:"Stealth Trader", trait:"Execution Speed", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054115/Execution_phantom_thar6c.jpg" },
+  { tier:4, archetype:"The DeFi Pioneer", description:"Remembers when gas was 200 gwei and you were grateful for it. Still here.", rank:"OG Builder", trait:"Deep Knowledge", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054116/DefiPioneer_o8jywt.jpg" },
+  { tier:3, archetype:"The Protocol Whisperer", description:"Integrated the API before the docs page was indexed. Filed a typo fix on the way out.", rank:"API Native", trait:"Fast Builder", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054115/protocol_whisperer_mwzrdj.jpg" },
+  { tier:3, archetype:"The Swap Surgeon", description:"Has a spreadsheet tracking slippage to the fourth decimal. Updates it weekly. By hand.", rank:"Slippage Slayer", trait:"Precision", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054117/swap_surgeon_mjxvtm.jpg" },
+  { tier:3, archetype:"The Liquidity Detective", description:"Found a pricing discrepancy across two pools at 3am. Closed it before anyone woke up.", rank:"Price Hunter", trait:"Arbitrage Eye", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054114/liquidity_detective_bdlrcq.jpg" },
+  { tier:3, archetype:"The Mempool Mystic", description:"Reads pending transactions the way other people read the news. Rarely surprised.", rank:"Block Whisperer", trait:"Mempool Vision", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054115/Mempool_Mystic_s3jyha.jpg" },
+  { tier:3, archetype:"The Yield Cartographer", description:"Maps every route so others don't have to. Sends unsolicited diagrams in group chats.", rank:"DeFi Navigator", trait:"Yield Finder", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054117/Yield_Cartographer_pxijll.jpg" },
+  { tier:3, archetype:"The Volume Conductor", description:"Moves more daily volume than some L2s. Treats it like a Tuesday.", rank:"Volume Master", trait:"Flow State", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054117/Volume_Conductor_hswj3g.jpg" },
+  { tier:2, archetype:"The Chain Hopper", description:"Has bridged to chains that don't have a block explorer yet. EVM, SVM, whatever ships next.", rank:"Cross-chain Pro", trait:"Chain Agnostic", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054115/chain_hopper_sa9srg.jpg" },
+  { tier:2, archetype:"The Fee Optimizer", description:"Monetizes every swap. Users don't notice. Finance does.", rank:"Revenue Engineer", trait:"Fee Flow", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054116/Fee_Optimizer_mzvw6e.jpg" },
+  { tier:2, archetype:"The Bridge Builder", description:"Connects chains, protocols, and teams. Has more RPCs saved than bookmarks.", rank:"Integration Pro", trait:"Cross-chain", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054114/Bridge_Builder_hmmvpb.jpg" },
+  { tier:2, archetype:"The Gasless Visionary", description:"Thinks requiring ETH to use ETH is a UX crime. Building accordingly.", rank:"UX Champion", trait:"Gasless Flow", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054116/Gasless_Visionary_vmmpcu.jpg" },
+  { tier:2, archetype:"The API Architect", description:"Clean code, clean integrations, opinions about error handling you didn't ask for.", rank:"Integration God", trait:"Clean Code", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054114/API_Architect_shhecw.jpg" },
+  { tier:2, archetype:"The Smart Router", description:"Never takes the obvious path. Somehow finds the one route with 40% less price impact.", rank:"Path Optimizer", trait:"Smart Routes", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054116/Smart_Router_zeydft.jpg" },
+  { tier:2, archetype:"The Aggregation Monk", description:"Ran the same swap on four different aggregators to see who filled 0.2 bps better. It was 0x.", rank:"Liquidity Sage", trait:"Best Price", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054114/Aggregation_Monk_p4ru5i.jpg" },
+  { tier:1, archetype:"The DeFi Initiate", description:"Just deployed a first swap. Already reading the advanced docs. Give it a month.", rank:"Rising Builder", trait:"Curiosity", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054115/DeFi_Initiate_pyztf0.jpg" },
+  { tier:1, archetype:"The Rising Builder", description:"Showed up, scanned the QR, answered the questions. That's how every legend started.", rank:"Newcomer", trait:"Curiosity", img:"https://res.cloudinary.com/dijzl4dmq/image/upload/v1775054114/Rising_Builder_pkxklw.jpg" }
 ];
 
 function assignCard(d){
-  const ratio = d.score / d.total;
-  const pool = ratio >= 0.6 ? CARDS.slice(0, 15) : CARDS;
+  const score = d.score;
+  let pool;
+  if (score >= 5) pool = CARDS.filter(c => c.tier === 4);
+  else if (score === 4) pool = CARDS.filter(c => c.tier === 4 || c.tier === 3);
+  else if (score === 3) pool = CARDS.filter(c => c.tier === 3 || c.tier === 2);
+  else if (score === 2) pool = CARDS.filter(c => c.tier === 2);
+  else pool = CARDS.filter(c => c.tier === 1);
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
 function showCard(c, d){
+  const tierColors = { 4:'#fbbf24', 3:'#60a5fa', 2:'#FCFCFC', 1:'#9ca3af' };
+  const color = tierColors[c.tier] || '#FCFCFC';
   setTimeout(() => {
     document.getElementById('card-loading').style.display='none';
     document.getElementById('card-content').style.display='block';
-    document.getElementById('card-archetype').textContent=c.archetype;
-    document.getElementById('card-desc').textContent=c.description;
-    document.getElementById('card-score-val').textContent=`${d.score}/${d.total}`;
-    document.getElementById('card-rank').textContent=c.rank;
-    document.getElementById('card-trait').textContent=c.trait;
+    document.getElementById('card-img').src = c.img;
+    document.getElementById('card-archetype').textContent = c.archetype;
+    document.getElementById('card-archetype').style.color = color;
+    document.getElementById('card-desc').textContent = c.description;
+    document.getElementById('card-score-val').textContent = `${d.score}/${d.total}`;
+    document.getElementById('card-score-val').style.color = color;
+    document.getElementById('card-rank').textContent = c.rank;
+    document.getElementById('card-rank').style.color = color;
+    document.getElementById('card-trait').textContent = c.trait;
+    document.getElementById('card-trait').style.color = color;
   }, 1800);
 }
 
@@ -436,7 +450,7 @@ async function downloadCard(){
 
 async function openAdmin(){
   document.getElementById('admin-overlay').classList.add('open');
-  document.getElementById('admin-data').textContent = 'Data is now in Airtable - check airtable.com';
+  document.getElementById('admin-data').textContent = 'Data is live in Airtable - check airtable.com';
 }
 function closeAdmin(){ document.getElementById('admin-overlay').classList.remove('open'); }
 function downloadCSV(){ alert('Your data is live in Airtable. Export from there!'); }
